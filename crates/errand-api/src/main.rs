@@ -59,6 +59,14 @@ async fn main() -> anyhow::Result<()> {
     // Create connection pool
     let pool = PgPoolOptions::new()
         .max_connections(20)
+        .after_connect(|conn, _meta| {
+            Box::pin(async move {
+                sqlx::query("SET search_path TO errand, public")
+                    .execute(&mut *conn)
+                    .await?;
+                Ok(())
+            })
+        })
         .connect(&config.database_url)
         .await?;
 
