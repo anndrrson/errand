@@ -22,9 +22,10 @@ pub async fn run_executor(
 ) {
     tracing::info!("Executor started");
 
+    let tavily_key = config.tavily_api_key.as_deref().unwrap_or("");
     let orchestrator = AgentOrchestrator::new(
         &config.anthropic_api_key,
-        &config.tavily_api_key,
+        tavily_key,
         &config.solana_rpc_url,
     );
     let orchestrator = Arc::new(orchestrator);

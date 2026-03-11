@@ -6,7 +6,7 @@ pub struct Config {
     pub jwt_secret: String,
     pub solana_rpc_url: String,
     pub anthropic_api_key: String,
-    pub tavily_api_key: String,
+    pub tavily_api_key: Option<String>,
     pub bind_addr: String,
 }
 
@@ -21,8 +21,7 @@ impl Config {
                 .unwrap_or_else(|_| "https://api.mainnet-beta.solana.com".to_string()),
             anthropic_api_key: std::env::var("ANTHROPIC_API_KEY")
                 .context("ANTHROPIC_API_KEY must be set")?,
-            tavily_api_key: std::env::var("TAVILY_API_KEY")
-                .context("TAVILY_API_KEY must be set")?,
+            tavily_api_key: std::env::var("TAVILY_API_KEY").ok(),
             bind_addr: std::env::var("BIND_ADDR")
                 .unwrap_or_else(|_| "0.0.0.0:8080".to_string()),
         })
