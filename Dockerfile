@@ -7,6 +7,8 @@ WORKDIR /app
 COPY Cargo.toml Cargo.lock ./
 COPY crates/ crates/
 
+# Limit parallel jobs to avoid OOM on free-tier build machines
+ENV CARGO_BUILD_JOBS=2
 RUN cargo build --release -p errand-api
 
 FROM debian:bookworm-slim
