@@ -29,3 +29,4 @@ cron = { workspace = true }
 html2text = { workspace = true }
 rand = "0.8"
 tokio-stream = "0.1"
+urlencoding = "2.1.3"

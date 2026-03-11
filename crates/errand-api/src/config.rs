@@ -12,9 +12,21 @@ pub struct Config {
 
 impl Config {
     pub fn from_env() -> Result<Self> {
+        // Build DATABASE_URL from individual params if available (avoids # encoding issues)
+        let database_url = if let (Ok(host), Ok(user), Ok(pass), Ok(db)) = (
+            std::env::var("DB_HOST"),
+            std::env::var("DB_USER"),
+            std::env::var("DB_PASSWORD"),
+            std::env::var("DB_NAME"),
+        ) {
+            let encoded_pass = urlencoding::encode(&pass);
+            format!("postgresql://{user}:{encoded_pass}@{host}:5432/{db}")
+        } else {
+            std::env::var("DATABASE_URL").context("DATABASE_URL must be set")?
+        };
+
         Ok(Self {
-            database_url: std::env::var("DATABASE_URL")
-                .context("DATABASE_URL must be set")?,
+            database_url,
             jwt_secret: std::env::var("JWT_SECRET")
                 .context("JWT_SECRET must be set")?,
             solana_rpc_url: std::env::var("SOLANA_RPC_URL")
