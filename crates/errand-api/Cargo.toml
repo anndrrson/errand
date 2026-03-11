@@ -1,0 +1,31 @@
+[package]
+name = "errand-api"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "errand-api"
+path = "src/main.rs"
+
+[dependencies]
+errand-types = { path = "../errand-types" }
+axum = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+sqlx = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+reqwest = { workspace = true }
+jsonwebtoken = { workspace = true }
+tower-http = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+anyhow = { workspace = true }
+dotenvy = { workspace = true }
+sha2 = { workspace = true }
+argon2 = { workspace = true }
+cron = { workspace = true }
+html2text = { workspace = true }
+rand = "0.8"
+tokio-stream = "0.1"

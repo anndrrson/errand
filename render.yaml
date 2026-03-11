@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: errand-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    region: oregon
+    plan: starter
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: TAVILY_API_KEY
+        sync: false
+      - key: SOLANA_RPC_URL
+        sync: false
+      - key: BIND_ADDR
+        value: 0.0.0.0:8080

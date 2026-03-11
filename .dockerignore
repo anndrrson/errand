@@ -1,0 +1,11 @@
+web/
+.git/
+target/
+programs/
+.anchor/
+test-ledger/
+node_modules/
+.env
+.env.*
+*.log
+.DS_Store
