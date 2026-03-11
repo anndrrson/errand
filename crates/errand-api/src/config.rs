@@ -20,7 +20,7 @@ impl Config {
             std::env::var("DB_NAME"),
         ) {
             let encoded_pass = urlencoding::encode(&pass);
-            format!("postgresql://{user}:{encoded_pass}@{host}:5432/{db}")
+            format!("postgresql://{user}:{encoded_pass}@{host}:5432/{db}?sslmode=require")
         } else {
             std::env::var("DATABASE_URL").context("DATABASE_URL must be set")?
         };

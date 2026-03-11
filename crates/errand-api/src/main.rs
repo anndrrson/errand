@@ -22,6 +22,7 @@ use tower_http::cors::{Any, CorsLayer};
 use tower_http::trace::TraceLayer;
 use uuid::Uuid;
 
+use anyhow::Context;
 use crate::config::Config;
 use crate::streaming::TaskProgressStream;
 
@@ -57,8 +58,10 @@ async fn main() -> anyhow::Result<()> {
     tracing::info!("Starting Errand API on {}", config.bind_addr);
 
     // Create connection pool
+    tracing::info!("Connecting to database...");
     let pool = PgPoolOptions::new()
         .max_connections(20)
+        .acquire_timeout(std::time::Duration::from_secs(10))
         .after_connect(|conn, _meta| {
             Box::pin(async move {
                 sqlx::query("SET search_path TO errand, public")
@@ -68,7 +71,8 @@ async fn main() -> anyhow::Result<()> {
             })
         })
         .connect(&config.database_url)
-        .await?;
+        .await
+        .context("Failed to connect to database — check DATABASE_URL or DB_HOST/DB_USER/DB_PASSWORD/DB_NAME")?;
 
     tracing::info!("Connected to database");
 
