@@ -184,7 +184,11 @@ export default function DashboardPage() {
               <Link
                 key={task.id}
                 href={`/tasks/${task.id}`}
-                className="group flex items-center gap-4 rounded-lg border border-border bg-surface-raised p-4 hover:border-text-muted hover:bg-surface-overlay transition-all"
+              >
+              <Card
+                interactive
+                padding="sm"
+                className="group flex items-center gap-4"
               >
                 <TaskTypeIcon kind={task.kind} size={18} />
                 <div className="flex-1 min-w-0">
@@ -204,6 +208,7 @@ export default function DashboardPage() {
                   size={14}
                   className="text-text-muted group-hover:text-text-secondary shrink-0"
                 />
+              </Card>
               </Link>
             ))}
           </div>
@@ -231,44 +236,45 @@ export default function DashboardPage() {
               <Link
                 key={run.id}
                 href={`/tasks/${run.task_id}`}
-                className="group flex items-center gap-4 rounded-lg border border-border bg-surface-raised p-4 hover:border-text-muted hover:bg-surface-overlay transition-all"
               >
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-medium text-text-primary group-hover:text-white truncate">
-                    {run.taskTitle}
-                  </h3>
-                  <div className="flex items-center gap-3 text-xs text-text-muted mt-1">
-                    <span
-                      className={`flex items-center gap-1 ${
-                        run.status === "completed"
-                          ? "text-success"
-                          : run.status === "failed"
-                            ? "text-error"
-                            : "text-brand-light"
-                      }`}
-                    >
-                      {run.status === "completed" ? (
-                        <CheckCircle2 size={12} />
-                      ) : run.status === "failed" ? (
-                        <AlertCircle size={12} />
-                      ) : (
-                        <Loader2 size={12} className="animate-spin" />
-                      )}
-                      {run.status}
-                    </span>
-                    <span>{formatDate(run.started_at)}</span>
-                    <span>{run.cost_credits} credits</span>
+                <Card interactive padding="sm" className="group flex items-center gap-4">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-medium text-text-primary group-hover:text-white truncate">
+                      {run.taskTitle}
+                    </h3>
+                    <div className="flex items-center gap-3 text-xs text-text-muted mt-1">
+                      <span
+                        className={`flex items-center gap-1 ${
+                          run.status === "completed"
+                            ? "text-success"
+                            : run.status === "failed"
+                              ? "text-error"
+                              : "text-brand-light"
+                        }`}
+                      >
+                        {run.status === "completed" ? (
+                          <CheckCircle2 size={12} />
+                        ) : run.status === "failed" ? (
+                          <AlertCircle size={12} />
+                        ) : (
+                          <Loader2 size={12} className="animate-spin" />
+                        )}
+                        {run.status}
+                      </span>
+                      <span>{formatDate(run.started_at)}</span>
+                      <span>{run.cost_credits} credits</span>
+                    </div>
+                    {run.result && (
+                      <p className="text-xs text-text-secondary mt-1.5 line-clamp-1">
+                        {run.result}
+                      </p>
+                    )}
                   </div>
-                  {run.result && (
-                    <p className="text-xs text-text-secondary mt-1.5 line-clamp-1">
-                      {run.result}
-                    </p>
-                  )}
-                </div>
-                <ArrowUpRight
-                  size={14}
-                  className="text-text-muted group-hover:text-text-secondary shrink-0"
-                />
+                  <ArrowUpRight
+                    size={14}
+                    className="text-text-muted group-hover:text-text-secondary shrink-0"
+                  />
+                </Card>
               </Link>
             ))}
           </div>

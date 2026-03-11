@@ -184,16 +184,17 @@ export default function Home() {
               <Link
                 key={task.text}
                 href={`/tasks/new?prefill=${encodeURIComponent(task.text)}`}
-                className="group flex items-center gap-4 rounded-lg border border-border bg-surface-raised p-4 hover:border-text-muted hover:bg-surface-overlay transition-all"
               >
-                <Icon size={18} className={task.color} />
-                <span className="text-sm text-text-primary group-hover:text-white">
-                  {task.text}
-                </span>
-                <ArrowRight
-                  size={14}
-                  className="ml-auto text-text-muted opacity-0 group-hover:opacity-100 transition-opacity"
-                />
+                <Card interactive padding="sm" className="group flex items-center gap-4">
+                  <Icon size={18} className={task.color} />
+                  <span className="text-sm text-text-primary group-hover:text-white">
+                    {task.text}
+                  </span>
+                  <ArrowRight
+                    size={14}
+                    className="ml-auto text-text-muted opacity-0 group-hover:opacity-100 transition-opacity"
+                  />
+                </Card>
               </Link>
             );
           })}

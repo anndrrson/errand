@@ -16,6 +16,7 @@ import { TaskTypeIcon } from "@/components/TaskTypeIcon";
 import { CategoryBadge } from "@/components/CategoryIcon";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
+import { Card } from "@/components/ui/Card";
 
 const kindFilters = [
   { value: "", label: "All Types" },
@@ -202,43 +203,44 @@ export default function TasksPage() {
               <Link
                 key={task.id}
                 href={`/tasks/${task.id}`}
-                className="group flex items-center gap-4 rounded-lg border border-border bg-surface-raised p-4 hover:border-text-muted hover:bg-surface-overlay transition-all"
               >
-                <TaskTypeIcon kind={task.kind} size={18} />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-3 mb-1">
-                    <h3 className="text-sm font-medium text-text-primary group-hover:text-white truncate">
-                      {task.title}
-                    </h3>
-                    <StatusBadge status={task.status} />
-                    <span className="text-xs text-text-muted hidden sm:inline">
-                      {getKindLabel(task.kind)}
-                    </span>
+                <Card interactive padding="sm" className="group flex items-center gap-4">
+                  <TaskTypeIcon kind={task.kind} size={18} />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 mb-1">
+                      <h3 className="text-sm font-medium text-text-primary group-hover:text-white truncate">
+                        {task.title}
+                      </h3>
+                      <StatusBadge status={task.status} />
+                      <span className="text-xs text-text-muted hidden sm:inline">
+                        {getKindLabel(task.kind)}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 text-xs text-text-muted">
+                      <CategoryBadge category={task.category} />
+                      {scheduleInfo && (
+                        <span className="truncate max-w-[200px]">
+                          {scheduleInfo}
+                        </span>
+                      )}
+                      {lastRun && (
+                        <span className="flex items-center gap-1">
+                          <Clock size={10} />
+                          Last: {formatDate(lastRun.started_at)}
+                        </span>
+                      )}
+                      {task.next_run_at && (
+                        <span className="text-brand-light">
+                          Next: {formatDate(task.next_run_at)}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3 text-xs text-text-muted">
-                    <CategoryBadge category={task.category} />
-                    {scheduleInfo && (
-                      <span className="truncate max-w-[200px]">
-                        {scheduleInfo}
-                      </span>
-                    )}
-                    {lastRun && (
-                      <span className="flex items-center gap-1">
-                        <Clock size={10} />
-                        Last: {formatDate(lastRun.started_at)}
-                      </span>
-                    )}
-                    {task.next_run_at && (
-                      <span className="text-brand-light">
-                        Next: {formatDate(task.next_run_at)}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <ArrowUpRight
-                  size={14}
-                  className="text-text-muted group-hover:text-text-secondary shrink-0"
-                />
+                  <ArrowUpRight
+                    size={14}
+                    className="text-text-muted group-hover:text-text-secondary shrink-0"
+                  />
+                </Card>
               </Link>
             );
           })}
