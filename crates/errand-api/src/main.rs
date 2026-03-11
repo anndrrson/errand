@@ -57,11 +57,14 @@ async fn main() -> anyhow::Result<()> {
     let config = Config::from_env()?;
     tracing::info!("Starting Errand API on {}", config.bind_addr);
 
-    // Create connection pool
-    tracing::info!("Connecting to database...");
+    // Create connection pool (lazy — don't block startup on DB)
+    tracing::info!("Creating database pool for: {}@{}",
+        config.database_url.split('@').last().unwrap_or("?"),
+        if config.database_url.contains("sslmode") { "ssl" } else { "no-ssl" }
+    );
     let pool = PgPoolOptions::new()
-        .max_connections(20)
-        .acquire_timeout(std::time::Duration::from_secs(10))
+        .max_connections(5)
+        .acquire_timeout(std::time::Duration::from_secs(15))
         .after_connect(|conn, _meta| {
             Box::pin(async move {
                 sqlx::query("SET search_path TO errand, public")
@@ -70,11 +73,10 @@ async fn main() -> anyhow::Result<()> {
                 Ok(())
             })
         })
-        .connect(&config.database_url)
-        .await
-        .context("Failed to connect to database — check DATABASE_URL or DB_HOST/DB_USER/DB_PASSWORD/DB_NAME")?;
+        .connect_lazy(&config.database_url)
+        .context("Failed to create database pool")?;
 
-    tracing::info!("Connected to database");
+    tracing::info!("Database pool created (lazy — will connect on first query)");
 
     // Create channels for background workers
     let (executor_tx, executor_rx) = mpsc::channel::<Uuid>(256);
